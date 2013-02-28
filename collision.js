@@ -1,9 +1,9 @@
 function CollisionSystem() {
   this.start = function(){
-    canvas = document.getElementsByTagName("CANVAS")[0];
-    context = canvas.getContext("2d");
-
-      console.log("oi");
+    this.canvas = document.getElementsByTagName("CANVAS")[0];
+    this.context = this.canvas.getContext("2d");
+    
+    this.attachResizeEvent();
     this.loadResources();
     this.loop();
   };
@@ -37,17 +37,28 @@ function CollisionSystem() {
   };
 
   this.draw = function(){
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     for(var i = 0; i < this.circles.length; i++) {
       var circle = this.circles[i];
-      context.fillStyle = circle.color;
+      this.context.fillStyle = circle.color;
 
-      context.beginPath();
-      context.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
-      context.closePath();
-      context.fill();
+      this.context.beginPath();
+      this.context.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+      this.context.closePath();
+      this.context.fill();
     }
+  };
+
+
+  this.attachResizeEvent = function() {
+    var resize = function() {
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+    }.bind(this);
+    window.onresize = function() {
+      resize();
+    }.bind(this)
   };
 }
 
