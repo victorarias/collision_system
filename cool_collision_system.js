@@ -5,5 +5,3 @@ function CoolCollisionSystem() {
 }
 
 CoolCollisionSystem.prototype = new CollisionSystem
-
-new CoolCollisionSystem().start();

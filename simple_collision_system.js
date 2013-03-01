@@ -17,5 +17,3 @@ function  SimpleCollisionSystem() {
 };
 
 SimpleCollisionSystem.prototype = new CollisionSystem;
-
-new SimpleCollisionSystem().start();
