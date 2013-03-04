@@ -7,8 +7,8 @@ function Event(time, circleA, circleB) {
   var countB = circleB ? circleB.count : -1;
 
   this.isValid = function(e) {
-    if(circleA && circleA.count != countA) return false;
-    if(circleB && circleB.count != countB) return false;
+    if(circleA && circleA.count != countA){ return false; }
+    if(circleB && circleB.count != countB){ return false; }
     return true;
   };
 };
@@ -17,7 +17,7 @@ function eventComparator(a, b) {
 };
 
 function CoolCollisionSystem() {
-  this.limit = 1000;
+  this.limit = 5000;
   this.currentTime = 0;
   this.pq = new PriorityQueue(eventComparator);
 
@@ -25,42 +25,48 @@ function CoolCollisionSystem() {
     for(var i = 0; i < this.circles.length; i++) {
       this.predict(this.circles[i]);
     }
-    this.draw();
+    this.redraw();
   };
   this.predict = function(circle) {
     if(!circle) return;
 
-    for(var i = 0; i < this.circles.length; i++) {
-      var circleToHit = this.circles[i];
-      var dt = circle.timeToHit(circleToHit);
-      if(this.currentTime + dt <= this.limit)
-        this.pq.enqueue(new Event(this.currentTime + dt, circle, circleToHit));
-    }
+    //for(var i = 0; i < this.circles.length; i++) {
+    //  var circleToHit = this.circles[i];
+    //  var dt = circle.timeToHit(circleToHit);
+    //  if(this.currentTime + dt <= this.limit)
+    //    this.pq.enqueue(new Event(this.currentTime + dt, circle, circleToHit));
+    //}
 
-    if(circle.timeToHitVerticalWall(this.canvas.width) < 0)
-      debugger;
-    if(circle.timeToHitHorizontalWall(this.canvas.height) < 0)
-      debugger;
+    //if(circle.timeToHitVerticalWall(this.canvas.width) < 0)
+    //  debugger;
+    //if(circle.timeToHitHorizontalWall(this.canvas.height) < 0)
+    //  debugger;
 
     var dtX = circle.timeToHitVerticalWall(this.canvas.width);
     var dtY = circle.timeToHitHorizontalWall(this.canvas.height);
 
-    if(this.currentTime + dtX <= this.limit) 
+    if (dtX < 0)
+      console.log("dtX < 0");
+
+    if(dtY < 0)
+      console.log("dtY < 0");
+
+    if(dtX <= this.limit) 
       this.pq.enqueue(new Event(this.currentTime + dtX, circle, null));
-    if(this.currentTime + dtY <= this.limit) 
+    if(dtY <= this.limit) 
       this.pq.enqueue(new Event(this.currentTime + dtY, null, circle));
   };
 
-  this.update = function() {
-    if(this.pq.isEmpty())
-      console.log("omg");
+  this.redraw = function() {
+    this.draw();
+    this.pq.enqueue(new Event(this.currentTime + 1, null, null));
+  };
 
+  this.update = function() {
     var e = this.pq.dequeue();
-    while(e.isValid() == false) {
-      if(this.pq.isEmpty())
-        console.log("omg!");
+
+    while(!e.isValid())
       e = this.pq.dequeue();
-    }
 
     var a = e.circleA;
     var b = e.circleB;
@@ -73,9 +79,15 @@ function CoolCollisionSystem() {
     if(a && b) a.bounceOff(b);
     else if(a && !b) a.bounceOffVerticalWall();
     else if(!a && b) b.bounceOffHorizontalWall();
+    else { this.redraw(); }
 
     this.predict(a);
     this.predict(b);
+  };
+
+  this.loop = function() {
+    this.update();
+    setTimeout(this.loop.bind(this), 1);
   };
 }
 

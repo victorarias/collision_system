@@ -28,14 +28,14 @@ function Circle(x, y, radius, mass, vX, vY) {
   };
 
   this.timeToHitVerticalWall = function(width) {
-    if (this.vX > 0) return Math.max(0, (width - this.x - this.radius) / this.vX);
-    else if (this.vY < 0) return Math.max(0, (this.radius - this.x) / this.vX);  
+    if (this.vX > 0) return (width - this.x - this.radius) / this.vX;
+    else if (this.vY < 0) return (this.radius - this.x) / this.vX;
     else return Infinity;
   };
 
   this.timeToHitHorizontalWall = function(height) {
-    if (this.vY > 0) return Math.max(0, (height - this.y - this.radius) / this.vY);
-    else if (this.vY < 0) return Math.max(0, (this.radius - this.y) / this.vY);
+    if (this.vY > 0) return (height - this.y - this.radius) / this.vY;
+    else if (this.vY < 0) return (this.radius - this.y) / this.vY;
     else return Infinity;
   };
 

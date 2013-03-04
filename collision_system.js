@@ -23,12 +23,12 @@ function CollisionSystem() {
 
   this.loadResources = function() {
     var circles = [];
-    for(var i = 0; i < 100; i++) {
+    for(var i = 0; i < 1; i++) {
       var radius = 2 * Math.random() * 10;
       var x = Math.random() * this.canvas.width - 1 - radius*2;
       var y = Math.random() * this.canvas.height - 1 - radius*2;
-      var vX = Math.random();
-      var vY = Math.random();
+      var vX = Math.random() * .5;
+      var vY = Math.random() * .5;
       var mass = radius / 2;
 
       if(x >= this.canvas.width)
