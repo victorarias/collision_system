@@ -6,8 +6,11 @@ function CollisionSystem() {
 
     this.attachResizeEvent();
     this.loadResources();
+    this.warmUp();
     this.loop();
   };
+
+  this.warmUp = function (){};
 
   this.loop = function() {
     this.update();
@@ -20,13 +23,18 @@ function CollisionSystem() {
 
   this.loadResources = function() {
     var circles = [];
-    for(var i = 0; i < 1000; i++) {
-      var x = 40 + (Math.random() * this.canvas.width - 20);
-      var y = 40 + (Math.random() * this.canvas.height - 20);
-      var vX = Math.random() * 4;
-      var vY = Math.random() * 4;
+    for(var i = 0; i < 100; i++) {
       var radius = 2 * Math.random() * 10;
+      var x = Math.random() * this.canvas.width - 1 - radius*2;
+      var y = Math.random() * this.canvas.height - 1 - radius*2;
+      var vX = Math.random();
+      var vY = Math.random();
       var mass = radius / 2;
+
+      if(x >= this.canvas.width)
+        debugger;
+      if(y >= this.canvas.height)
+        debugger;
 
       circles.push(new Circle(x, y, radius, mass, vX, vY));
     }

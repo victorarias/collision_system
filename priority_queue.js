@@ -3,6 +3,10 @@ function PriorityQueue(comparator) {
   this.size = 0;
   this._itens = [];
 
+  this.isEmpty = function() {
+    return this.size == 0;
+  }
+
   this.enqueue = function(item) {
     this._itens[this.size] = item;
     this._swim(this.size++);
