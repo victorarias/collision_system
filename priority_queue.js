@@ -26,9 +26,9 @@ function PriorityQueue(comparator) {
   };
 
   this._swim = function(position) {
-    while(position > 0 && this._greater( position / 2, position)) {
-      this._exchange(position, position / 2);
-      position = Math.floor(position / 2);
+    while(position > 0 && this._greater( (position - 1) / 2, position)) {
+      this._exchange(position, (position - 1) / 2);
+      position = Math.floor((position - 1) / 2);
     };
   };
 
@@ -54,5 +54,14 @@ function PriorityQueue(comparator) {
     a = Math.floor(a);
     b = Math.floor(b);
     return this._comparator(this._itens[a], this._itens[b]) > 0;
+  }
+
+  this.cloneItens = function() {
+    var es = [];
+    for(var i = 0; i < this.size; i++) {
+      var e = this._itens[i];
+      es[i] = {time: e.time}; 
+    }
+    return es;
   }
 }

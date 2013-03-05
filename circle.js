@@ -27,15 +27,19 @@ function Circle(x, y, radius, mass, vX, vY) {
     return -(dvdr + Math.sqrt(d)) / dvdv;
   };
 
+  this.round = function(n) {
+    return Math.floor(n * 1000)/1000;
+  };
+
   this.timeToHitVerticalWall = function(width) {
-    if (this.vX > 0) return (width - this.x - this.radius) / this.vX;
-    else if (this.vY < 0) return (this.radius - this.x) / this.vX;
+    if (this.vX > 0) return (width - this.round(this.x + this.radius)) / this.vX;
+    else if (this.vX < 0) return this.round(this.radius - this.x) / this.vX;
     else return Infinity;
   };
 
   this.timeToHitHorizontalWall = function(height) {
-    if (this.vY > 0) return (height - this.y - this.radius) / this.vY;
-    else if (this.vY < 0) return (this.radius - this.y) / this.vY;
+    if (this.vY > 0) return (height - this.round(this.y + this.radius)) / this.vY;
+    else if (this.vY < 0) return this.round(this.radius - this.y) / this.vY;
     else return Infinity;
   };
 
@@ -80,20 +84,9 @@ function Circle(x, y, radius, mass, vX, vY) {
   };
 
   this.move = function(time, width, height) {
-    if(time) {
+    if(typeof(time) != "undefined") {
       this.x += this.vX * time;
       this.y += this.vY * time;
-
-      if(this.x < 0)
-        this.x = 0;
-      if(this.x > width)
-        this.x = width - 1;
-      if(this.y < 0)
-        this.y = 0;
-      if(this.y > height)
-        this.y = height - 1; 
-      if(this.x > width || this.y > height)
-        debugger;
     }
     else {
       this.x += this.vX;
@@ -102,7 +95,6 @@ function Circle(x, y, radius, mass, vX, vY) {
   }
 
   this.checkCollisionOnX = function(width) {
-    debugger;
     if (this.x - this.radius < 0) {
       this.x = this.radius;
       this.vX *= -1;
@@ -113,7 +105,6 @@ function Circle(x, y, radius, mass, vX, vY) {
   }
 
   this.checkCollisionOnY = function(height) {
-    debugger;
     if (this.y - this.radius < 0) {
       this.y = this.radius;
       this.vY *= -1;
@@ -124,7 +115,6 @@ function Circle(x, y, radius, mass, vX, vY) {
   }
 
   this.checkCollisionOnAnotherCircle = function(circle2) {
-    debugger;
     var dX = circle2.x - this.x;
     var dY = circle2.y - this.y;
     var distance = Math.sqrt( dX * dX + dY * dY );

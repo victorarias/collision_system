@@ -27,38 +27,28 @@ function CoolCollisionSystem() {
     }
     this.redraw();
   };
+
   this.predict = function(circle) {
     if(!circle) return;
 
-    //for(var i = 0; i < this.circles.length; i++) {
-    //  var circleToHit = this.circles[i];
-    //  var dt = circle.timeToHit(circleToHit);
-    //  if(this.currentTime + dt <= this.limit)
-    //    this.pq.enqueue(new Event(this.currentTime + dt, circle, circleToHit));
-    //}
-
-    //if(circle.timeToHitVerticalWall(this.canvas.width) < 0)
-    //  debugger;
-    //if(circle.timeToHitHorizontalWall(this.canvas.height) < 0)
-    //  debugger;
+    for(var i = 0; i < this.circles.length; i++) {
+      var circleToHit = this.circles[i];
+      var dt = circle.timeToHit(circleToHit);
+      if(dt > 0)
+        this.pq.enqueue(new Event(this.currentTime + dt, circle, circleToHit));
+    }
 
     var dtX = circle.timeToHitVerticalWall(this.canvas.width);
     var dtY = circle.timeToHitHorizontalWall(this.canvas.height);
 
-    if (dtX < 0)
-      console.log("dtX < 0");
-
-    if(dtY < 0)
-      console.log("dtY < 0");
-
-    if(dtX <= this.limit) 
-      this.pq.enqueue(new Event(this.currentTime + dtX, circle, null));
-    if(dtY <= this.limit) 
-      this.pq.enqueue(new Event(this.currentTime + dtY, null, circle));
+    this.pq.enqueue(new Event(this.currentTime + dtX, circle, null));
+    this.pq.enqueue(new Event(this.currentTime + dtY, null, circle));
   };
 
+  this.oldDraw = this.draw;
+  this.draw = function(){};
   this.redraw = function() {
-    this.draw();
+    this.oldDraw();
     this.pq.enqueue(new Event(this.currentTime + 1, null, null));
   };
 
@@ -70,7 +60,7 @@ function CoolCollisionSystem() {
 
     var a = e.circleA;
     var b = e.circleB;
-
+    
     for(var i = 0; i < this.circles.length; i++) {
       this.circles[i].move(e.time - this.currentTime, this.canvas.width, this.canvas.height);
     }
@@ -83,11 +73,6 @@ function CoolCollisionSystem() {
 
     this.predict(a);
     this.predict(b);
-  };
-
-  this.loop = function() {
-    this.update();
-    setTimeout(this.loop.bind(this), 1);
   };
 }
 
