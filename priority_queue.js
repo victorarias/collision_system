@@ -18,11 +18,18 @@ function PriorityQueue(comparator) {
     this._sink(0);
     this._itens[this.size] = null;
 
+    if (this.size > 0 && this.size == Math.floor(this._itens.length / 4)) 
+      this._resize(Math.floor(this._itens.length  / 2));
+
     return tmp;
   };
 
   this.min = function() {
     return this._itens[0];
+  };
+
+  this._resize = function(newSize) {
+    this._itens = this._itens.slice(0, newSize);
   };
 
   this._swim = function(position) {

@@ -3,6 +3,33 @@ var comparator = function(a, b) {
 };
 
 module("priority queue");
+test("should release big arrays if possible", function() {
+  var pq = new PriorityQueue(comparator);
+
+  pq.enqueue(1);
+  pq.enqueue(2);
+  pq.enqueue(3);
+  pq.enqueue(4);
+  pq.enqueue(5);
+  pq.enqueue(6);
+  pq.enqueue(7);
+  pq.enqueue(8);
+  pq.enqueue(9);
+  pq.enqueue(10);
+  pq.enqueue(11);
+  pq.enqueue(12);
+  pq.dequeue();
+  pq.dequeue();
+  pq.dequeue();
+  pq.dequeue();
+  pq.dequeue();
+  pq.dequeue();
+  pq.dequeue();
+  pq.dequeue();
+  pq.dequeue();
+
+  equal(pq._itens.length, 6);
+});
 test("should enqueue itens", function() {
   var pq = new PriorityQueue(comparator);
   pq.enqueue(1);
