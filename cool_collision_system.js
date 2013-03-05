@@ -34,7 +34,7 @@ function CoolCollisionSystem() {
     for(var i = 0; i < this.circles.length; i++) {
       var circleToHit = this.circles[i];
       var dt = circle.timeToHit(circleToHit);
-      if(dt > 0)
+      if(dt > 0 && dt < this.circles.length/2)
         this.pq.enqueue(new Event(this.currentTime + dt, circle, circleToHit));
     }
 
@@ -49,7 +49,7 @@ function CoolCollisionSystem() {
   this.draw = function(){};
   this.redraw = function() {
     this.oldDraw();
-    this.pq.enqueue(new Event(this.currentTime + 1, null, null));
+    this.pq.enqueue(new Event(this.currentTime + .5, null, null));
   };
 
   this.update = function() {
