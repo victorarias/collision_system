@@ -1,6 +1,6 @@
 function  SimpleCollisionSystem() {
   this.update = function() {
-    for(var a = 0; a < this.circles.length; a++) {
+    for(var a = 0, length = this.circles.length; a < length; a++) {
       var circle1 = this.circles[a];
 
       for(var b = a + 1; b < this.circles.length; b++) {

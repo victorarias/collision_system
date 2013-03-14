@@ -6,7 +6,6 @@ function Circle(x, y, radius, mass, vX, vY) {
 
   this.vX = vX;
   this.vY = vY;
-  this.color = 'rgb(0, 0, 0)';
 
   this.count = 0;
 
@@ -28,18 +27,19 @@ function Circle(x, y, radius, mass, vX, vY) {
   };
 
   this.round = function(n) {
-    return Math.floor(n * 1000)/1000;
+    return n;
+    //return Math.floor(n * 1000)/1000;
   };
 
   this.timeToHitVerticalWall = function(width) {
-    if (this.vX > 0) return (width - this.round(this.x + this.radius)) / this.vX;
-    else if (this.vX < 0) return this.round(this.radius - this.x) / this.vX;
+    if (this.vX > 0) return (width - (this.x + this.radius)) / this.vX;
+    else if (this.vX < 0) return (this.radius - this.x) / this.vX;
     else return Infinity;
   };
 
   this.timeToHitHorizontalWall = function(height) {
-    if (this.vY > 0) return (height - this.round(this.y + this.radius)) / this.vY;
-    else if (this.vY < 0) return this.round(this.radius - this.y) / this.vY;
+    if (this.vY > 0) return (height - (this.y + this.radius)) / this.vY;
+    else if (this.vY < 0) return (this.radius - this.y) / this.vY;
     else return Infinity;
   };
 
@@ -75,8 +75,6 @@ function Circle(x, y, radius, mass, vX, vY) {
   };
 
   this.drawIn = function(context) {
-    context.fillStyle = this.color;
-
     context.beginPath();
     context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     context.closePath();

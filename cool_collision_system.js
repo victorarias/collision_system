@@ -17,12 +17,11 @@ function eventComparator(a, b) {
 };
 
 function CoolCollisionSystem() {
-  this.limit = 5000;
   this.currentTime = 0;
   this.pq = new PriorityQueue(eventComparator);
 
   this.warmUp = function() {
-    for(var i = 0; i < this.circles.length; i++) {
+    for(var i = 0, length = this.circles.length; i < length; i++) {
       this.predict(this.circles[i]);
     }
     this.redraw();
@@ -31,7 +30,7 @@ function CoolCollisionSystem() {
   this.predict = function(circle) {
     if(!circle) return;
 
-    for(var i = 0; i < this.circles.length; i++) {
+    for(var i = 0, length = this.circles.length; i < length; i++) {
       var circleToHit = this.circles[i];
       var dt = circle.timeToHit(circleToHit);
       if(dt > 0 && dt < this.circles.length/2)
@@ -49,7 +48,7 @@ function CoolCollisionSystem() {
   this.draw = function(){};
   this.redraw = function() {
     this.oldDraw();
-    this.pq.enqueue(new Event(this.currentTime + .5, null, null));
+    this.pq.enqueue(new Event(this.currentTime + .1, null, null));
   };
 
   this.update = function() {
@@ -61,7 +60,7 @@ function CoolCollisionSystem() {
     var a = e.circleA;
     var b = e.circleB;
     
-    for(var i = 0; i < this.circles.length; i++) {
+    for(var i = 0, length = this.circles.length; i < length; i++) {
       this.circles[i].move(e.time - this.currentTime, this.canvas.width, this.canvas.height);
     }
     this.currentTime = e.time;
