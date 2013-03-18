@@ -53,7 +53,7 @@ function CoolCollisionSystem() {
   };
 
   this.update = function() {
-    while(true) {
+    do {
       var e = this.pq.dequeue();
 
       while(!e.isValid())
@@ -75,7 +75,7 @@ function CoolCollisionSystem() {
 
       this.predict(a);
       this.predict(b);
-    }
+    } while(true);
   };
 }
 
