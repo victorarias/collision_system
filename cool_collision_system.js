@@ -48,30 +48,34 @@ function CoolCollisionSystem() {
   this.draw = function(){};
   this.redraw = function() {
     this.oldDraw();
-    this.pq.enqueue(new Event(this.currentTime + .1, null, null));
+    this.pq.enqueue(new Event(this.currentTime + .5, null, null));
+    setTimeout(this.update.bind(this), 1);
   };
 
   this.update = function() {
-    var e = this.pq.dequeue();
+    while(true) {
+      var e = this.pq.dequeue();
 
-    while(!e.isValid())
-      e = this.pq.dequeue();
+      while(!e.isValid())
+        e = this.pq.dequeue();
 
-    var a = e.circleA;
-    var b = e.circleB;
-    
-    for(var i = 0, length = this.circles.length; i < length; i++) {
-      this.circles[i].move(e.time - this.currentTime, this.canvas.width, this.canvas.height);
+      var a = e.circleA;
+      var b = e.circleB;
+
+      for(var i = 0, length = this.circles.length; i < length; i++) {
+        this.circles[i].move(e.time - this.currentTime, this.canvas.width, this.canvas.height);
+      }
+      this.currentTime = e.time;
+      this.currentTime = e.time;
+
+      if(a && b) a.bounceOff(b);
+      else if(a && !b) a.bounceOffVerticalWall();
+      else if(!a && b) b.bounceOffHorizontalWall();
+      else { this.redraw(); return; }
+
+      this.predict(a);
+      this.predict(b);
     }
-    this.currentTime = e.time;
-
-    if(a && b) a.bounceOff(b);
-    else if(a && !b) a.bounceOffVerticalWall();
-    else if(!a && b) b.bounceOffHorizontalWall();
-    else { this.redraw(); }
-
-    this.predict(a);
-    this.predict(b);
   };
 }
 
