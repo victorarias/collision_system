@@ -3,9 +3,8 @@ function CollisionSystem() {
     this.canvas = document.getElementsByTagName("CANVAS")[0];
     this.context = this.canvas.getContext("2d");
     this.fpsCounter = new FpsCounter().start();
-    this.profiler = new Profiler();
-
-    this.profiler.profileFunc("update", this, "update");
+    //this.profiler = new Profiler();
+    //this.profiler.profileFunc("update", this, "update");
 
     this.attachResizeEvent();
     this.loadResources();

@@ -15,16 +15,32 @@ function Event(time, circleA, circleB) {
 function eventComparator(a, b) {
   return a.time > b.time ? 1 : a.time == b.time ? 0 : -1;
 };
+var speed = 1;
+// Try making it 10x faster :)
+// speed = 10;
+var fps = 60,
+    frameInterval = systemToGameTime(1 / fps * 1000);
 
+function systemToGameTime(msec) {
+  return msec * speed / 100;
+}
+
+function gameToSystemTime(time) {
+  return time / speed * 100;
+}
 function CoolCollisionSystem() {
   this.currentTime = 0;
   this.pq = new PriorityQueue(eventComparator);
 
   this.warmUp = function() {
+    this.currentTime = systemToGameTime(Date.now());
+
     for(var i = 0, length = this.circles.length; i < length; i++) {
       this.predict(this.circles[i]);
     }
-    this.redraw();
+
+    //first draw
+    this.pq.enqueue(new Event(this.currentTime + frameInterval, null, null));
   };
 
   this.predict = function(circle) {
@@ -45,19 +61,21 @@ function CoolCollisionSystem() {
   };
 
   this.oldDraw = this.draw;
-  this.draw = function(){};
-  this.redraw = function() {
+  this.draw = function() {
+    var realTime = systemToGameTime(Date.now());
+    var wait = gameToSystemTime(e.time - realTime);
+    this.last_wait = wait; // Allow the FPS counter to report the last wait time
+
     this.oldDraw();
-    this.pq.enqueue(new Event(this.currentTime + .5, null, null));
-    setTimeout(this.update.bind(this), 1);
+    this.pq.enqueue(new Event(this.currentTime + frameInterval, null, null));
+    setTimeout(this.loop.bind(this), wait);
   };
 
-  this.update = function() {
-    do {
-      var e = this.pq.dequeue();
-
-      while(!e.isValid())
-        e = this.pq.dequeue();
+  this.loop = function() {
+    while (true) {
+      e = this.pq.dequeue();
+      if (!e.isValid())
+        continue;
 
       var a = e.circleA;
       var b = e.circleB;
@@ -66,16 +84,18 @@ function CoolCollisionSystem() {
         this.circles[i].move(e.time - this.currentTime, this.canvas.width, this.canvas.height);
       }
       this.currentTime = e.time;
-      this.currentTime = e.time;
 
       if(a && b) a.bounceOff(b);
       else if(a && !b) a.bounceOffVerticalWall();
       else if(!a && b) b.bounceOffHorizontalWall();
-      else { this.redraw(); return; }
+      else {
+        this.draw();
+        return;
+      }
 
       this.predict(a);
       this.predict(b);
-    } while(true);
+    }
   };
 }
 

@@ -16,7 +16,8 @@
     <script type="text/javascript" src="collision_system.js"></script>
     <script type="text/javascript" src="simple_collision_system.js"></script>
     <script type="text/javascript">
-      new SimpleCollisionSystem().start();
+      window.collisionSystem = new SimpleCollisionSystem();
+      window.collisionSystem.start();
     </script>
   </body>
 </html>

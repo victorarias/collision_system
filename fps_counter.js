@@ -12,7 +12,8 @@ function FpsCounter() {
 
   this.start = function() {
     setInterval(function() {
-      document.title = "FPS = " + this.fps;
+      var last_wait = Math.round(window.collisionSystem.last_wait);
+      document.title = 'W: ' + last_wait + ' ms, FPS: ' + this.fps;
     }.bind(this), 1000);
     return this;
   };
